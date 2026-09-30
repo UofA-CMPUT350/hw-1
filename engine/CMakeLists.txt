@@ -3,16 +3,19 @@ if (CMAKE_VERSION VERSION_LESS "3.28")
 else ()
     include(FetchContent)
     FetchContent_Declare(
-            SFML
-            GIT_REPOSITORY https://github.com/SFML/SFML.git
-            GIT_TAG 3.1.0
-            GIT_SHALLOW ON
-            EXCLUDE_FROM_ALL
-            SYSTEM
+        SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG 3.1.0
+        GIT_SHALLOW ON
+        EXCLUDE_FROM_ALL
+        SYSTEM
     )
     set(SFML_USE_SYSTEM_DEPS OFF)
     FetchContent_MakeAvailable(SFML)
-endif ()
+    if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        target_link_libraries(freetype PRIVATE harfbuzz)
+    endif ()
+endif()
 
 file(GLOB ENGINE CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
